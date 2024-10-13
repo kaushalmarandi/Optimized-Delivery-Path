@@ -31,7 +31,8 @@ public class OptimizedPathFinder {
         double prepTime1 = 0.8;
         double prepTime2 = 0.9;
 
-        double shortestTime =
+        double shortestTime = TimeCalculator.shortestDeliveryTime(allPaths, prepTime1, prepTime2);
+        return shortestTime;
 
     }
 

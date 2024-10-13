@@ -25,8 +25,9 @@ public class TimeCalculator {
         for(int i=0; i < locations.size()-1; i++){
             Location current = locations.get(i);
             Location next = locations.get(i+1);
-            totalTime +=
+            totalTime += calculateTime(current, next);
         }
+        return  totalTime + prepTime1 + prepTime2;
     }
 
     /*
