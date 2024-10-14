@@ -12,7 +12,8 @@ public class PathGenerator {
     public static List<Path> generatePaths(List<Location> locations, DeliveryPerson deliveryPerson, Map<Location, Customer> customerMap,
                                            Map<Location, Restaurant> restaurantMap){
         List<Path> allPaths = new ArrayList<>();
-        permute(new Path(), new ArrayList<>(locations), allPaths, deliveryPerson);
+        List<Location> allLocations = new ArrayList<>(locations);
+        permute(new Path(), allLocations, allPaths, deliveryPerson);
         return filterPaths(allPaths, customerMap, restaurantMap);
     }
 
@@ -33,7 +34,8 @@ public class PathGenerator {
             if (ObjectUtils.isEmpty(path.getLocations()) || path.getLocations().get(0).equals(deliveryPerson.getDeliveryPersonLocation())){
                 //Create new path, based on current path, and add the current location
                 Path newPath = new Path();
-                List<Location> newLocations = new ArrayList<>(path.getLocations());
+                List<Location> newLocations = new ArrayList<>(); //path.getLocations()
+                if(path.getLocations() != null) newLocations.addAll(path.getLocations());
                 newLocations.add(currentlocation); //adding the current location
                 newPath.setLocations(newLocations);
 
@@ -67,12 +69,12 @@ public class PathGenerator {
             Location current = path.getLocations().get(i);
             Customer customer = customerMap.get(current);
             Restaurant restaurant = restaurantMap.get(current);
-            if (current.getLocationType().equals(LocationType.RESTAURANT_LOCATION)){
+            if (current.getLocationType().equals(LocationType.RESTAURANT)){
                 boolean isIdMatch = customerMap.values().stream().anyMatch(c -> restaurant.getId().equals(c.getRestaurant().getId()));
                 if (isIdMatch){
                     visitedRestaurantIds.add(restaurant.getId());
                 }
-            } else if (current.getLocationType().equals(LocationType.CUSTOMER_LOCATION)) {
+            } else if (current.getLocationType().equals(LocationType.CUSTOMER)) {
                 if (!visitedRestaurantIds.contains(customer.getRestaurant().getId())){
                     return false;
                 }
